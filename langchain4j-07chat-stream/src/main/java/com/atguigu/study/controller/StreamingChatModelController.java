@@ -45,6 +45,7 @@ public class StreamingChatModelController
                 @Override
                 public void onCompleteResponse(ChatResponse completeResponse)
                 {
+                    System.out.println("---response over: "+completeResponse);
                     emitter.complete();
                 }
 
@@ -89,6 +90,14 @@ public class StreamingChatModelController
     public Flux<String> chat3(@RequestParam(value = "prompt", defaultValue = "南京有什么好吃") String prompt)
     {
         System.out.println("---come in chat3");
+
+        return chatAssistant.chatFlux(prompt);
+    }
+
+    @GetMapping(value = "/chatstream/chat4")
+    public Flux<String> chat4(@RequestParam(value = "prompt", defaultValue = "滕州有什么好吃") String prompt)
+    {
+        System.out.println("---come in chat4");
 
         return chatAssistant.chatFlux(prompt);
     }
