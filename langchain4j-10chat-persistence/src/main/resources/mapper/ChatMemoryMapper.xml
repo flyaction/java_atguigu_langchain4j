@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.study.mapper.ChatMemoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.atguigu.study.entity.ChatMemory">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="memoryId" column="memory_id" jdbcType="VARCHAR"/>
+            <result property="messageJson" column="message_json" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,memory_id,message_json,
+        created_at,updated_at
+    </sql>
+</mapper>

@@ -1,5 +1,6 @@
 package com.atguigu.study.config;
 
+import com.atguigu.study.service.ChatMysqlPersistenceAssistant;
 import com.atguigu.study.service.ChatPersistenceAssistant;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -22,6 +23,9 @@ public class LLMConfig
     @Resource
     private RedisChatMemoryStore redisChatMemoryStore;
 
+    @Resource
+    private MysqlChatMemoryStore mysqlChatMemoryStore;
+
     @Bean
     public ChatModel chatModel()
     {
@@ -43,6 +47,22 @@ public class LLMConfig
                 .build();
 
         return AiServices.builder(ChatPersistenceAssistant.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider)
+                .build();
+    }
+
+    @Bean
+    public ChatMysqlPersistenceAssistant chatMysqlMemoryAssistant(ChatModel chatModel)
+    {
+
+        ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
+                .id(memoryId)
+                .maxMessages(1000)
+                .chatMemoryStore(mysqlChatMemoryStore)
+                .build();
+
+        return AiServices.builder(ChatMysqlPersistenceAssistant.class)
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider)
                 .build();
