@@ -41,7 +41,7 @@ public class McpCallServerController
 
 
     @GetMapping("/mcp/chat")
-    public Flux<String> chat(@RequestParam("question") String question) throws Exception
+    public Flux<String> chat(@RequestParam("question") String question)
     {
         /**1.构建McpTransport协议
          *
@@ -55,8 +55,16 @@ public class McpCallServerController
         McpTransport transport = new StdioMcpTransport.Builder()
                 //.command(List.of("cmd", "/c", "npx", "-y", "@baidumap/mcp-server-baidu-map"))
                 .command(List.of("npx", "-y", "@baidumap/mcp-server-baidu-map"))
-                .environment(Map.of("BAIDU_MAP_API_KEY", System.getenv("BAIDU_MAP_API_KEY")))
+                .environment(Map.of("BAIDU_MAP_API_KEY",System.getenv("BAIDU_MAP_API_KEY")))
+                .logEvents(true) // only if you want to see the traffic in the log
                 .build();
+
+
+//        McpTransport transport = new HttpMcpTransport.Builder()
+//                .sseUrl("https://mcp.map.baidu.com/sse?ak=yHWFqCBXiiwVrk4psrl7IvqE7IsiBgQ6")
+//                //.logRequests(true) // if you want to see the traffic in the log
+//                //.logResponses(true)
+//                .build();
 
         // 2.构建McpClient客户端
         McpClient mcpClient = new DefaultMcpClient.Builder()
@@ -76,11 +84,9 @@ public class McpCallServerController
 
 
         // 5.调用我们定义的HighApi接口,通过大模型对百度mcpserver调用
-        try {
-            return mcpService.chat(question);
-        } finally {
-            mcpClient.close();
-        }
+        return mcpService.chat(question);
+
+
     }
 }
 
